@@ -5,24 +5,24 @@ import { useEffect, useRef } from "react";
 type LoopVideoProps = {
   src: string;
   className?: string;
-  /** Sayfa açılışında görünen videolar için; diğerleri ekrana girince yüklenip oynatılır. */
+  /** true: hemen yüklenmeye başlar (açılışta görünen videolar). false: ekrana girince yüklenir. */
   eager?: boolean;
 };
 
-/** Sessiz, döngüde oynayan dekoratif arka plan videosu. */
+/** Sessiz, döngüde oynayan dekoratif arka plan videosu; ekran dışındayken durur. */
 export default function LoopVideo({ src, className, eager = false }: LoopVideoProps) {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const video = ref.current;
-    if (eager || !video) return;
+    if (!video) return;
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) video.play().catch(() => {});
       else video.pause();
     });
     observer.observe(video);
     return () => observer.disconnect();
-  }, [eager, src]);
+  }, [src]);
 
   return (
     <video

@@ -53,51 +53,56 @@ const socials = [
 
 export default function Social() {
   return (
-    <section aria-labelledby="social-title" className="relative h-[292px] bg-brand-dark text-white">
+    <section
+      aria-labelledby="social-title"
+      className="relative bg-brand-dark px-(--gutter) py-12 text-white md:py-16 xl:min-h-[292px] xl:px-[75px] xl:pt-[42px] xl:pb-10"
+    >
+      {/* Masaüstünde krom işaret 280→390px; alttan sabit, bültenin üstüne taşar. */}
       <Image
         src="/images/chrome-mark.png"
         alt=""
         width={351}
         height={553}
-        className="pointer-events-none absolute -top-[273px] right-[79px] z-10"
+        sizes="390px"
+        className="pointer-events-none absolute right-[79px] bottom-[12px] z-10 hidden h-auto w-[calc(280px+110*var(--fp))] xl:block"
       />
 
-      <div className="px-[75px] pt-[42px]">
-        <p className="text-2xl leading-none font-semibold">GÜÇLÜ AĞIMIZA DİJİTALDE DE KATILIN</p>
-        <h2 id="social-title" className="mt-[13px] text-display font-semibold">
-          BİZİ TAKİP EDİN
-        </h2>
+      <p className="text-sm leading-tight font-semibold md:text-lg xl:text-2xl xl:leading-none">
+        GÜÇLÜ AĞIMIZA DİJİTALDE DE KATILIN
+      </p>
+      <h2 id="social-title" className="mt-2 text-heading font-semibold xl:mt-[13px]">
+        BİZİ TAKİP EDİN
+      </h2>
 
-        <div className="mt-[16px] flex items-start">
-          <ul className="mt-[23px] flex w-[409px] gap-[30px]">
-            {socials.map(({ name, href, icon }) => (
-              <li key={name}>
-                <a
-                  href={href}
-                  aria-label={name}
-                  className="block transition-opacity hover:opacity-70"
+      <div className="mt-6 flex flex-col gap-6 xl:mt-[16px] xl:flex-row xl:items-start xl:gap-0">
+        <ul className="flex gap-6 xl:mt-[23px] xl:w-[409px] xl:shrink-0 xl:gap-[30px]">
+          {socials.map(({ name, href, icon }) => (
+            <li key={name}>
+              <a
+                href={href}
+                aria-label={name}
+                className="block transition-opacity hover:opacity-70"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  className="size-[26px]"
+                  aria-hidden
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.3"
-                    className="size-[26px]"
-                    aria-hidden
-                  >
-                    {icon}
-                  </svg>
-                </a>
-              </li>
-            ))}
-          </ul>
-          <p className="max-w-[915px] text-base leading-[23px]">
-            37 yıllık sektörel tecrübemizi, yeni yatırımlarımızı ve Sayan Grup çatısı altındaki son
-            gelişmeleri dijital platformlara taşıyoruz. Demir çelik, lojistik ve yatırım dünyasına
-            dair güncel haberleri ilk elden öğrenmek, kurumsal vizyonumuza yakından tanık olmak için
-            bizi sosyal medya hesaplarımızdan takip edin. İş ağımızın bir parçası olun.
-          </p>
-        </div>
+                  {icon}
+                </svg>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p className="text-body md:max-w-[640px] xl:max-w-[calc(430px+485*var(--fp))]">
+          37 yıllık sektörel tecrübemizi, yeni yatırımlarımızı ve Sayan Grup çatısı altındaki son
+          gelişmeleri dijital platformlara taşıyoruz. Demir çelik, lojistik ve yatırım dünyasına
+          dair güncel haberleri ilk elden öğrenmek, kurumsal vizyonumuza yakından tanık olmak için
+          bizi sosyal medya hesaplarımızdan takip edin. İş ağımızın bir parçası olun.
+        </p>
       </div>
     </section>
   );

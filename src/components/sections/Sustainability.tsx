@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Leaf, Recycle } from "lucide-react";
-import SectionLabel from "@/components/ui/SectionLabel";
+import SectionHeading from "@/components/ui/SectionHeading";
+import { cn } from "@/lib/utils";
 
 const stats = [
   {
@@ -26,46 +27,59 @@ export default function Sustainability() {
     <section
       id="surdurulebilirlik"
       aria-labelledby="sustainability-title"
-      className="relative h-[763px]"
+      // Masaüstü sütunları: başlık 356→609px, görsel 330→530px, metin kalan alan (sağ kenara kadar).
+      className="px-(--gutter) pt-12 md:pt-16 xl:grid xl:grid-cols-[calc(356px+253*var(--fp))_calc(330px+200*var(--fp))_1fr] xl:items-start xl:pt-0 xl:pr-0 xl:pl-[74px]"
     >
+      <SectionHeading
+        label="SÜRDÜRÜLEBİLİRLİK"
+        id="sustainability-title"
+        className="xl:mt-[156px]"
+        titleClassName="xl:mt-[7px]"
+      >
+        GELECEK İÇİN
+        <br />
+        YEŞİL ÇELİK
+      </SectionHeading>
+
       <Image
         src="/images/green-steel.png"
         alt="Bitkilerle kaplı krom Sayan logo işareti"
         width={449}
         height={708}
-        className="absolute top-[55px] left-[683px]"
+        sizes="(min-width: 1280px) 449px, (min-width: 768px) 240px, 150px"
+        className="mx-auto mt-8 h-auto w-[150px] md:w-[240px] xl:mx-0 xl:mt-[55px] xl:w-[calc(300px+149*var(--fp))]"
       />
 
-      <div className="absolute top-[156px] left-[74px]">
-        <SectionLabel>SÜRDÜRÜLEBİLİRLİK</SectionLabel>
-        <h2 id="sustainability-title" className="mt-[7px] pl-[43px] text-display font-semibold">
-          GELECEK İÇİN
-          <br />
-          YEŞİL ÇELİK
-        </h2>
-      </div>
-
-      <div className="absolute top-[243px] right-0 left-[1213px]">
-        <p className="max-w-[645px] pl-[3px] text-base leading-[23px]">
+      <div className="mt-8 xl:mt-[calc(150px+93*var(--fp))]">
+        <p className="text-body md:max-w-[645px] xl:pl-[3px]">
           Karbon ayak izimizi azaltmak ve yarınlara daha temiz bir dünya bırakmak için tedarik
           süreçlerimizi optimize ediyoruz. Geri dönüştürülebilir malzemeler ve enerji verimliliği
           odaklı lojistik ağımızla, çeliğin gücünü doğa ile buluşturuyoruz.
         </p>
 
-        <ul className="mt-[64px] flex flex-col gap-[63px]">
+        <ul className="mt-10 flex flex-col gap-10 md:gap-12 xl:mt-[64px] xl:gap-[63px]">
           {stats.map(({ value, label, caption, icon: Icon, textClass, bgClass }) => (
             <li key={value}>
               {/* Rakamın alt boşluğu şeridin altında kalır; referansta rakam şeride oturur. */}
-              <p className={`-mb-[10px] text-[58px] leading-none font-bold ${textClass}`}>
+              <p
+                className={cn(
+                  "-mb-[6px] text-[40px] leading-none font-bold md:text-5xl xl:-mb-[10px] xl:text-[58px]",
+                  textClass,
+                )}
+              >
                 {value}
               </p>
+              {/* Şerit ekranın sağ kenarına kadar uzanır. */}
               <p
-                className={`flex h-[49px] items-center gap-[19px] pl-[23px] text-sm font-bold text-white ${bgClass}`}
+                className={cn(
+                  "-mr-(--gutter) flex h-11 items-center gap-3 pl-4 text-xs font-bold text-white md:h-[49px] xl:mr-0 xl:gap-[19px] xl:pl-[23px] xl:text-sm",
+                  bgClass,
+                )}
               >
-                <Icon aria-hidden className="size-[27px]" strokeWidth={1.25} />
+                <Icon aria-hidden className="size-6 xl:size-[27px]" strokeWidth={1.25} />
                 {label}
               </p>
-              <p className="mt-[13px] text-base leading-[23px]">{caption}</p>
+              <p className="mt-3 text-body xl:mt-[13px]">{caption}</p>
             </li>
           ))}
         </ul>

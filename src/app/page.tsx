@@ -17,13 +17,13 @@ export default function Home() {
       <Hero />
       <main>
         <About />
-        <Divider className="mb-[62px]" />
+        <Divider className="xl:mb-[62px]" />
         <Companies />
-        <Divider className="mt-[62px]" />
+        <Divider className="mt-10 md:mt-14 xl:mt-[62px]" />
         <Capabilities />
         <Divider />
         <Activities />
-        <Divider className="mt-[58px] mb-[64px]" />
+        <Divider className="my-12 md:my-16 xl:mt-[58px] xl:mb-[64px]" />
         <Stats />
         <Sustainability />
         <Blog />

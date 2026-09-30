@@ -15,9 +15,60 @@
   --color-surface: #f5f5f5;
   --color-eco: #199640;
 
-  /* Bölüm başlıkları: text-display */
-  --text-display: 62px;
-  --text-display--line-height: 73px;
+  /*
+   * Şerit geçişi: gelen katman --slide-from'dan içeri girer, giden katman ters yöne çıkar.
+   * İkisi aynı süre/eğriyle kaydığı için tek parça gibi görünür.
+   * --slide-from: 100% → yeni sağdan girer; -100% → yeni soldan girer.
+   */
+  --animate-slide-in: slide-in 850ms cubic-bezier(0.65, 0, 0.35, 1);
+  --animate-slide-out: slide-out 850ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  --animate-fade-in: fade-in 600ms ease-out;
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(var(--slide-from));
+    }
+  }
+  @keyframes slide-out {
+    to {
+      transform: translateX(calc(-1 * var(--slide-from)));
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/*
+ * Masaüstü ölçekleme: --fp, 1280px ekranda 0, 1920px ekranda 1px olur.
+ * xl ölçüleri calc(<1280 değeri> + <fark> * var(--fp)) biçiminde yazılır;
+ * böylece 1920'de tasarımdaki değere, 1280'de sığan değere eşit olur.
+ */
+:root {
+  --fp: 0px;
+  /* Mobil/tablet sayfa kenar boşluğu (masaüstünde bölümler kendi ölçülerini kullanır). */
+  --gutter: 1rem;
+  /* Etiket çizgisi + boşluk: başlık ve etiket metni bu girintiden başlar. */
+  --label-indent: 38px;
+}
+@media (width >= 48rem) {
+  :root {
+    --gutter: 2.5rem;
+    --label-indent: 45px;
+  }
+}
+@media (width >= 80rem) {
+  :root {
+    --fp: calc((100vw - 1280px) / 640);
+    --label-indent: 43px;
+  }
 }
 
 html {
@@ -28,8 +79,98 @@ body {
   @apply bg-white text-ink;
 }
 
+/* Gövde metni: mobil 14px, tablet+ 16px; masaüstünde satır 23px. */
+@utility text-body {
+  font-size: 14px;
+  line-height: 1.6;
+  @media (width >= 48rem) {
+    font-size: 16px;
+  }
+  @media (width >= 80rem) {
+    line-height: 23px;
+  }
+}
+
+/* Bölüm başlıkları: mobil 22px, tablet 36px, masaüstü 44→62px (satır 73px). */
+@utility text-heading {
+  font-size: 22px;
+  line-height: 1.25;
+  @media (width >= 48rem) {
+    font-size: 36px;
+    line-height: 1.2;
+  }
+  @media (width >= 80rem) {
+    font-size: calc(44px + 18 * var(--fp));
+    line-height: calc(52px + 21 * var(--fp));
+  }
+}
+
+/*
+ * Hover/odakta içi soldan sağa dolan buton. Dolgu ve yazı rengi
+ * --btn-fill ve --btn-fill-text ile değiştirilebilir (varsayılan beyaz dolgu, koyu yazı).
+ */
+@utility btn-fill {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: color 400ms ease;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--btn-fill, var(--color-white));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 400ms ease;
+  }
+  &:hover,
+  &:focus-visible {
+    color: var(--btn-fill-text, var(--color-ink-deep));
+  }
+  &:hover::before,
+  &:focus-visible::before {
+    transform: scaleX(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &::before {
+      transition: none;
+    }
+  }
+}
+
+/* Hover/odakta altında soldan sağa uzanan çizgi olan metin linki (çizgi yazı renginde). */
+@utility link-underline {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.2em;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 300ms ease;
+  }
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      transition: none;
+    }
+  }
+}
+
 /* İçi boş (kontur) başlık yazısı. */
 @utility text-outline {
   color: transparent;
-  -webkit-text-stroke: 1.5px var(--color-white);
+  -webkit-text-stroke: 1px var(--color-white);
+  @media (width >= 80rem) {
+    -webkit-text-stroke-width: 1.5px;
+  }
 }

@@ -1,6 +1,13 @@
 import { cn } from "@/lib/utils";
 
-/** Bölümler arasındaki 1440px'lik ince ayırıcı. Dikey boşluk className ile verilir. */
+/** Bölümler arasındaki ince ayırıcı (masaüstünde 1440px). Dikey boşluk className ile verilir. */
 export default function Divider({ className }: { className?: string }) {
-  return <hr className={cn("mx-auto h-px max-w-[1440px] border-0 bg-divider", className)} />;
+  return (
+    <hr
+      className={cn(
+        "mx-(--gutter) h-px border-0 bg-divider xl:mx-auto xl:max-w-[1440px]",
+        className,
+      )}
+    />
+  );
 }

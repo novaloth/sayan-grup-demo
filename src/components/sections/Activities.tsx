@@ -1,10 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { MoveRight } from "lucide-react";
 import { useState } from "react";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
-import SectionLabel from "@/components/ui/SectionLabel";
+import SectionHeading from "@/components/ui/SectionHeading";
 import { cn } from "@/lib/utils";
 
 type Activity = {
@@ -59,20 +58,27 @@ export default function Activities() {
     <section
       id="faaliyet-alanlari"
       aria-labelledby="activities-title"
-      className="flex justify-between pt-[60px]"
+      className="px-(--gutter) pt-12 md:pt-16 xl:flex xl:justify-between xl:px-0 xl:pt-[60px]"
     >
-      <div className="pl-[72px]">
-        <SectionLabel>YATIRIMLARA YÖN VEREN</SectionLabel>
-        <h2 id="activities-title" className="mt-[8px] pl-[43px] text-display font-semibold">
+      <div className="xl:pl-[72px]">
+        <SectionHeading
+          label="YATIRIMLARA YÖN VEREN"
+          id="activities-title"
+          titleClassName="xl:mt-[8px]"
+        >
           FAALİYET ALANLARIMIZ
-        </h2>
+        </SectionHeading>
 
-        <div className="mt-[19px] ml-[41px] h-[263px] w-px bg-brand-soft" aria-hidden />
+        <div
+          className="mt-[19px] ml-[41px] hidden h-[263px] w-px bg-brand-soft xl:block"
+          aria-hidden
+        />
 
+        {/* Masaüstünde sekme yazıları 1280'de 30px'e iner ki kart sekmelerin üstüne binmesin. */}
         <div
           role="tablist"
           aria-label="Faaliyet alanları"
-          className="mt-10 flex flex-col gap-[39px] pl-[42px]"
+          className="mt-6 flex flex-col gap-3 pl-(--label-indent) md:mt-8 md:gap-5 xl:mt-10 xl:gap-[39px] xl:pl-[42px]"
         >
           {activities.map((activity, index) => {
             const selected = index === activeIndex;
@@ -85,25 +91,43 @@ export default function Activities() {
                 aria-controls="activity-panel"
                 onClick={() => setActiveIndex(index)}
                 className={cn(
-                  "flex h-[44px] w-fit items-center gap-[47px] text-left leading-none transition-colors",
+                  "flex w-fit items-center gap-3 text-left text-lg leading-none transition-colors md:gap-5 md:text-3xl xl:h-[44px] xl:gap-[calc(30px+12*var(--fp))]",
                   selected
-                    ? "text-[42px] font-bold text-brand"
-                    : "text-[43px] font-light hover:text-brand",
+                    ? "font-bold text-brand xl:text-[calc(30px+12*var(--fp))]"
+                    : "font-light hover:text-brand xl:text-[calc(31px+12*var(--fp))]",
                 )}
               >
                 {activity.label}
-                {selected && <MoveRight aria-hidden className="size-[54px]" strokeWidth={1.1} />}
+                {selected && (
+                  // 62px'lik ikonun içindeki ok 46x38px; 1920'de tasarımla birebir.
+                  <Image
+                    src="/images/icon-arrow-right.png"
+                    alt=""
+                    width={62}
+                    height={62}
+                    className="size-7 md:size-12 xl:size-[calc(46px+16*var(--fp))]"
+                  />
+                )}
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Görsel sütunu; kart bu sütunun içinde akar ve 185px sola taşar. Kart uzarsa sütun da uzar. */}
-      <div className="relative isolate mt-[3px] w-[887px] shrink-0 pt-[153px] pb-[96px]">
-        <div className="absolute inset-0 -z-10 overflow-hidden">
+      {/*
+        Görsel sütunu (masaüstünde 600→887px). Kart bu sütunun içinde akar ve sola taşar;
+        kart uzarsa sütun da uzar. Mobilde görsel üstte, kart onun altına biner.
+      */}
+      <div className="relative isolate -mx-(--gutter) mt-8 md:mt-10 xl:mx-0 xl:mt-[3px] xl:w-[calc(600px+287*var(--fp))] xl:shrink-0 xl:pt-[153px] xl:pb-[96px]">
+        <div className="relative h-[240px] overflow-hidden md:h-[420px] xl:absolute xl:inset-0 xl:-z-10 xl:h-auto">
           {active.image ? (
-            <Image src={active.image} alt="" fill sizes="887px" className="object-cover" />
+            <Image
+              src={active.image}
+              alt=""
+              fill
+              sizes="(min-width: 1280px) 46vw, 100vw"
+              className="object-cover"
+            />
           ) : (
             <ImagePlaceholder label={active.label} className="size-full" />
           )}
@@ -112,20 +136,20 @@ export default function Activities() {
         <div
           id="activity-panel"
           role="tabpanel"
-          className="-ml-[185px] min-h-[627px] w-[638px] rounded-[24px] bg-black/60 pt-[45px] pr-[60px] pb-[45px] pl-[61px] text-white backdrop-blur-[2px]"
+          className="relative mx-(--gutter) -mt-16 rounded-[20px] bg-ink/95 p-6 text-white md:-mt-24 md:p-10 xl:mx-0 xl:mt-0 xl:-ml-[calc(120px+65*var(--fp))] xl:min-h-[627px] xl:w-[calc(520px+118*var(--fp))] xl:rounded-[24px] xl:bg-black/60 xl:pt-[45px] xl:pr-[60px] xl:pb-[45px] xl:pl-[61px] xl:backdrop-blur-[2px]"
         >
-          <h3 className="text-[35px] leading-[53px] font-light">
+          <h3 className="text-xl leading-snug font-light md:text-3xl xl:text-[35px] xl:leading-[53px]">
             {active.title[0]}
             <br />
             {active.title[1]}
           </h3>
-          <div className="mt-[13px] text-base leading-6">
+          <div className="mt-3 text-body xl:mt-[13px] xl:leading-6">
             {active.paragraphs.map((p) => (
               <p key={p}>{p}</p>
             ))}
           </div>
           {active.bullets && (
-            <ul className="mt-6 list-disc pl-6 text-base leading-6">
+            <ul className="mt-4 list-disc pl-5 text-body xl:mt-6 xl:pl-6 xl:leading-6">
               {active.bullets.map((b) => (
                 <li key={b}>{b}</li>
               ))}
