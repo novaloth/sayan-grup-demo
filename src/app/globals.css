@@ -1,11 +1,23 @@
 @import "tailwindcss";
 
-/*
- * Tasarım token'ları (renk, tipografi, boşluk) tasarım aşamasında burada tanımlanacak.
- * Örn: --color-brand-500: #...;
- */
 @theme inline {
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-poppins);
+}
+
+/* Renkler referans tasarımın piksellerinden alınmıştır. */
+@theme {
+  --color-brand: #9a1b1f;
+  --color-brand-dark: #8b1d24;
+  --color-brand-soft: #c7888a;
+  --color-ink: #31363a;
+  --color-ink-deep: #1e2328;
+  --color-divider: #f6ebeb;
+  --color-surface: #f5f5f5;
+  --color-eco: #199640;
+
+  /* Bölüm başlıkları: text-display */
+  --text-display: 62px;
+  --text-display--line-height: 73px;
 }
 
 html {
@@ -13,5 +25,11 @@ html {
 }
 
 body {
-  @apply bg-white text-slate-900;
+  @apply bg-white text-ink;
+}
+
+/* İçi boş (kontur) başlık yazısı. */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-white);
 }
