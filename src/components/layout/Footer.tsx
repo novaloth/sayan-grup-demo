@@ -2,23 +2,21 @@ import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
 import LogoMark from "@/components/ui/LogoMark";
-import { companies } from "@/lib/companies";
-import { mainNav } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import type { Company, SiteContent } from "@/types/content";
 
-/** Footer'da şirket logolarının tasarımdaki sırası. */
-const footerCompanyOrder = ["dessan", "sayan-metal", "sayan-lojistik", "sayan-investing"];
-const footerCompanies = footerCompanyOrder.map((id) => companies.find((c) => c.id === id)!);
+type FooterProps = {
+  site: SiteContent;
+  /** Logoları site.footerCompanyIds sırasıyla gösterilir. */
+  companies: Company[];
+};
 
-const contact = [
-  { label: "Adres", value: "Şekerpınar Mh. Muhsinyazıcıoğlu Cd. No:36, Çayırova / Kocaeli" },
-  { label: "Telefon", value: "0 532 457 29 26", href: "tel:+905324572926" },
-  { label: "E-posta", value: "info@sayangrup.com.tr", href: "mailto:info@sayangrup.com.tr" },
-];
+export default function Footer({ site, companies }: FooterProps) {
+  const footerCompanies = site.footerCompanyIds
+    .map((id) => companies.find((company) => company.id === id))
+    .filter((company): company is Company => Boolean(company));
+  const legal = [site.legalLinks.privacy, site.legalLinks.kvkk, site.legalLinks.cookies];
 
-const legal = ["Gizlilik Politikası", "KVKK Aydınlatma Metni", "Çerez Politikası"];
-
-export default function Footer() {
   return (
     <footer id="iletisim">
       <div className="relative isolate overflow-hidden bg-linear-to-b from-[#2f3438] to-[#262b2f] px-(--gutter) pt-12 pb-24 text-white md:pt-16 md:pb-28 xl:min-h-[631px] xl:px-[73px] xl:pt-[69px] xl:pb-0">
@@ -47,7 +45,7 @@ export default function Footer() {
         {/* Masaüstünde menü yazısı 1280'de 32px'e iner ki tek satıra sığsın. */}
         <nav aria-label="Alt menü" className="mt-10 md:mt-14 xl:mt-[87px] xl:mr-[30px]">
           <ul className="grid grid-cols-2 gap-x-6 gap-y-4 text-lg leading-none font-light md:flex md:flex-wrap md:justify-between md:text-2xl xl:flex-nowrap xl:text-[calc(32px+11*var(--fp))]">
-            {mainNav.map((item) => (
+            {site.nav.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="link-underline">
                   {item.label}
@@ -60,7 +58,7 @@ export default function Footer() {
 
       <div className="relative -mt-16 px-(--gutter) md:-mt-20 xl:-mt-[73px] xl:px-[73px]">
         <address className="grid gap-5 rounded-[20px] bg-white p-6 not-italic shadow-[0_10px_40px_rgba(0,0,0,0.08)] md:grid-cols-3 md:p-8 xl:mr-[17px] xl:h-[147px] xl:grid-cols-[calc(480px+149*var(--fp))_calc(220px+42*var(--fp))_1fr] xl:content-center xl:gap-0 xl:rounded-[24px] xl:py-0 xl:pr-0 xl:pl-[61px]">
-          {contact.map(({ label, value, href }) => {
+          {site.contact.map(({ label, value, href }) => {
             const Value = href ? "a" : "p";
             return (
               <div key={label}>
@@ -81,16 +79,15 @@ export default function Footer() {
 
         <div className="flex flex-col gap-4 py-6 text-sm md:flex-row md:items-center md:justify-between xl:pt-[28px] xl:pr-[21px] xl:pb-[34px] xl:pl-[2px] xl:text-[calc(15px+3*var(--fp))]">
           <p className="flex flex-col gap-2 md:flex-row md:items-center md:gap-5">
-            {/* Tasarımda "Ayrancı Grup" yazıyordu; Sayan Grup olarak düzeltildi. */}
-            <span>© 2026 Sayan Grup. Tüm hakları saklıdır.</span>
+            <span>{site.copyright}</span>
             <span className="flex flex-wrap items-center gap-x-3 gap-y-2 md:gap-5">
               {legal.map((item, i) => (
-                <span key={item} className="flex items-center gap-3 md:gap-5">
+                <span key={item.label} className="flex items-center gap-3 md:gap-5">
                   <span aria-hidden className={cn("text-brand", i === 0 && "hidden md:inline")}>
                     |
                   </span>
-                  <Link href="#" className="link-underline">
-                    {item}
+                  <Link href={item.href} className="link-underline">
+                    {item.label}
                   </Link>
                 </span>
               ))}

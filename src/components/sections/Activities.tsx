@@ -4,53 +4,12 @@ import Image from "next/image";
 import { useState } from "react";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 import SectionHeading from "@/components/ui/SectionHeading";
+import TitleLines from "@/components/ui/TitleLines";
 import { cn } from "@/lib/utils";
+import type { ActivitiesContent } from "@/types/content";
 
-type Activity = {
-  id: string;
-  label: string;
-  title: [string, string];
-  paragraphs: string[];
-  bullets?: string[];
-  image?: string;
-};
-
-// TODO: Yassı Metal, Lojistik ve Yatırım sekmelerinin metin ve görselleri müşteriden bekleniyor.
-const activities: Activity[] = [
-  {
-    id: "demir-celik",
-    label: "DEMİR ÇELİK TİCARETİ",
-    title: ["Güvenle İnşa Edilen,", "Geleceğe Uzanan Yapılar"],
-    paragraphs: [
-      "Sektördeki yarım asra yaklaşan köklü tecrübemizle, Türkiye’nin dört bir yanındaki büyük ölçekli projelerin ve yapıların en güçlü destekçisiyiz. İnşaat demirinden çelik hasıra, filmaşinden yapısal profil ürünlerine kadar geniş bir yelpazede sunduğumuz yüksek kaliteli malzemelerle, sektörün ihtiyaçlarına anında ve eksiksiz yanıt veriyoruz.",
-      "Bizim için demir çelik ticareti sadece hammadde tedariki değil; doğayla uyum içinde yükselen, sürdürülebilir ve çevre dostu bir geleceğe uzanan sağlam köprüler kurmaktır. Sektörün dinamiklerini yakından takip eden uzman kadromuz, güçlü sermaye yapımız ve kesintisiz stok yönetimimiz sayesinde, iş ortaklarımıza piyasa koşullarında her zaman en rekabetçi, en şeffaf ve en güvenilir çözümleri sunuyoruz.",
-    ],
-    bullets: [
-      "Neler Sunuyoruz? İnşaat demiri, çelik hasır, kangal demir (filmaşin) ve yapısal çelik gruplarında standartlara tam uyumlu, geniş stoklu tedarik.",
-    ],
-    image: "/images/steel-coils.jpg",
-  },
-  {
-    id: "yassi-metal",
-    label: "YASSI METAL",
-    title: ["Yassı Metal", "Başlık Metni Eklenecek"],
-    paragraphs: ["Yassı Metal açıklama metni eklenecek."],
-  },
-  {
-    id: "lojistik",
-    label: "LOJİSTİK",
-    title: ["Lojistik", "Başlık Metni Eklenecek"],
-    paragraphs: ["Lojistik açıklama metni eklenecek."],
-  },
-  {
-    id: "yatirim",
-    label: "YATIRIM",
-    title: ["Yatırım", "Başlık Metni Eklenecek"],
-    paragraphs: ["Yatırım açıklama metni eklenecek."],
-  },
-];
-
-export default function Activities() {
+export default function Activities({ content }: { content: ActivitiesContent }) {
+  const activities = content.items;
   const [activeIndex, setActiveIndex] = useState(0);
   const active = activities[activeIndex];
 
@@ -61,12 +20,8 @@ export default function Activities() {
       className="px-(--gutter) pt-12 md:pt-16 xl:flex xl:justify-between xl:px-0 xl:pt-[60px]"
     >
       <div className="xl:pl-[72px]">
-        <SectionHeading
-          label="YATIRIMLARA YÖN VEREN"
-          id="activities-title"
-          titleClassName="xl:mt-[8px]"
-        >
-          FAALİYET ALANLARIMIZ
+        <SectionHeading label={content.label} id="activities-title" titleClassName="xl:mt-[8px]">
+          <TitleLines lines={content.title} />
         </SectionHeading>
 
         <div

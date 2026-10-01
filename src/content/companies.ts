@@ -1,20 +1,4 @@
-type Asset = { src: string; width: number; height: number };
-
-export type Company = {
-  id: string;
-  name: string;
-  /** 60px'lik metalik logo; footer'da ve (bannerLogo yoksa) banner'da kullanılır. */
-  logo: Asset;
-  bannerLogo?: Asset;
-  /** Küçük kartta gösterilen 30px'lik logo. */
-  thumbLogo: Asset;
-  bannerVideo: string;
-  /** Verilmezse bannerVideo kullanılır. */
-  thumbVideo?: string;
-  title: [string, string];
-  description: string;
-  url: string;
-};
+import type { Company } from "@/types/content";
 
 // TODO: Dessan, Sayan Investing ve Sayan Lojistik metinleri ile şirket linkleri müşteriden bekleniyor.
 export const companies: Company[] = [

@@ -1,8 +1,15 @@
+import SiteHeader from "@/components/layout/SiteHeader";
 import LogoMark from "@/components/ui/LogoMark";
 import LoopVideo from "@/components/ui/LoopVideo";
-import SiteHeader from "@/components/sections/SiteHeader";
+import type { HeroContent, NavItem } from "@/types/content";
 
-export default function Hero() {
+type HeroProps = {
+  content: HeroContent;
+  /** Header, Hero'nun üstüne saydam olarak biner. */
+  nav: NavItem[];
+};
+
+export default function Hero({ content, nav }: HeroProps) {
   return (
     <section
       aria-labelledby="hero-title"
@@ -10,7 +17,7 @@ export default function Hero() {
       className="relative isolate h-svh min-h-[600px] overflow-hidden bg-black text-white xl:min-h-[640px] xl:rounded-b-[50px]"
     >
       <LoopVideo
-        src="/videos/hero.mp4"
+        src={content.video}
         eager
         className="absolute inset-0 -z-20 size-full object-cover"
       />
@@ -25,23 +32,20 @@ export default function Hero() {
         stroke="rgba(255,255,255,0.18)"
       />
 
-      <SiteHeader />
+      <SiteHeader nav={nav} />
 
       {/* Metin alttan konumlanır ki kısa ekranlarda kesilmesin (masaüstünde alt boşluk 107px). */}
       <div className="absolute inset-x-(--gutter) bottom-[88px] md:bottom-[120px] xl:inset-x-auto xl:bottom-[107px] xl:left-[72px]">
         <h1 id="hero-title">
           <span className="block text-xl leading-none font-light md:text-4xl xl:text-5xl xl:tracking-[0.01em]">
-            1987’DEN BERİ
+            {content.eyebrow}
           </span>
           <span className="mt-1.5 block text-[30px] leading-none font-bold md:mt-2 md:text-[64px] xl:mt-[9px] xl:text-[94px] xl:tracking-[-0.012em]">
-            GÜVENİN ADRESİ
+            {content.title}
           </span>
         </h1>
         <p className="mt-5 max-w-[560px] text-sm leading-[19px] md:text-base md:leading-6 xl:mt-[25px] xl:leading-[19px]">
-          Sayan Grup, 1987 yılında Yönetim Kurulu Başkanımız Sinan Ayan&apos;ın liderliğinde inşaat
-          demiri ticaretiyle sektöre adım attı. Yıllar içinde edindiğimiz deneyim ve kurduğumuz
-          güvene dayalı ilişkiler sayesinde faaliyet alanlarımızı genişleterek bugünkü yapımıza
-          ulaştık.
+          {content.text}
         </p>
       </div>
     </section>

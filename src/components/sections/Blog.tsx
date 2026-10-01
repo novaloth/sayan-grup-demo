@@ -2,39 +2,21 @@ import Image from "next/image";
 import Link from "next/link";
 import PillLink, { pillClass } from "@/components/ui/PillLink";
 import SectionHeading from "@/components/ui/SectionHeading";
+import TitleLines from "@/components/ui/TitleLines";
+import type { BlogContent } from "@/types/content";
 
-// TODO: Yazı linkleri ve "Tümünü Gör" hedefi müşteriden bekleniyor.
-const posts = [
-  {
-    title: "Sayan Lojistik, Entegre Tedarik Zinciri Yapısıyla Faaliyetlerine Başladı",
-    excerpt:
-      "Sayan Grup'un dördüncü iştiraki Sayan Lojistik, Kocaeli Çayırova merkezli operasyonlarıyla faaliyetlerine başlıyor. Şirket, grubun mevcut lojistik altyapısını bağımsız bir yapıya kavuşturarak karayolu taşımacılığı, depolama ve dağıtım hizmetlerini tek çatı altında sunuyor.",
-    image: "/images/blog-logistics.jpg",
-    href: "#",
-  },
-  {
-    title: "Dessan Demir Çelik, Çayırova Tesisinde Kapasite Artışına Gitti",
-    excerpt:
-      "Dessan Demir Çelik, Kocaeli Çayırova Şekerpınar'daki ana tesisinde gerçekleştirdiği yatırımla depolama alanını genişletti. Yeni düzenlemeyle birlikte tesisin toplam stok kapasitesi önemli ölçüde artırıldı.",
-    image: "/images/blog-wind.jpg",
-    href: "#",
-  },
-];
-
-export default function Blog() {
+export default function Blog({ content }: { content: BlogContent }) {
   return (
     <section
       id="medya"
       aria-labelledby="blog-title"
       className="relative px-(--gutter) pt-14 pb-14 md:pt-16 md:pb-20 xl:px-[74px] xl:pt-[17px] xl:pb-[97px]"
     >
-      <SectionHeading label="BLOG & DUYURULAR" id="blog-title" titleClassName="xl:mt-[7px]">
-        SEKTÖREL VİZYON
-        <br />
-        VE İÇGÖRÜLER
+      <SectionHeading label={content.label} id="blog-title" titleClassName="xl:mt-[7px]">
+        <TitleLines lines={content.title} />
       </SectionHeading>
       <PillLink
-        href="#"
+        href={content.allPostsHref}
         tone="dark"
         className="mt-5 ml-(--label-indent) px-5 xl:absolute xl:top-[106px] xl:right-[73px] xl:mt-0 xl:ml-0 xl:px-[27px]"
       >
@@ -42,8 +24,8 @@ export default function Blog() {
       </PillLink>
 
       <ul className="mt-8 grid gap-10 md:grid-cols-2 md:gap-6 xl:mt-[39px] xl:gap-[21px]">
-        {posts.map((post) => (
-          <li key={post.title}>
+        {content.posts.map((post) => (
+          <li key={post.slug}>
             <Link href={post.href} className="group block">
               <div className="relative h-[220px] overflow-hidden rounded-b-[16px] md:h-[280px] xl:h-[calc(280px+160*var(--fp))]">
                 <Image
@@ -58,7 +40,7 @@ export default function Blog() {
                   aria-hidden
                   className="absolute inset-0 bg-brand-dark opacity-0 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-85 group-focus-visible:opacity-85"
                 />
-                {/* Dış katman konum/belirmeyi, iç katman (btn-fill) buton hover dolgusunu yönetir. */}
+                {/* Dış katman konum/belirmeyi, iç katman (pillClass) buton hover dolgusunu yönetir. */}
                 <span
                   aria-hidden
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[calc(-50%+12px)] opacity-0 transition-[opacity,translate] duration-500 group-hover:translate-y-[-50%] group-hover:opacity-100 group-focus-visible:translate-y-[-50%] group-focus-visible:opacity-100"

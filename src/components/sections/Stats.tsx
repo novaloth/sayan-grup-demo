@@ -1,17 +1,13 @@
 import Image from "next/image";
+import { Fragment } from "react";
 import CountUp from "@/components/ui/CountUp";
 import { cn } from "@/lib/utils";
+import type { StatItem, StatsContent } from "@/types/content";
 
-type StatCardProps = {
-  value: number;
-  suffix?: string;
-  label: string;
-  className?: string;
-  image?: string;
-  icon?: React.ReactNode;
-};
+/** Masaüstü düzeni: 1. kart geniş (sol üst köşe yuvarlak), 4. kart geniş (sağ alt köşe yuvarlak). */
+const cardLayout = ["rounded-tl-[16px] xl:col-span-2", "", "", "rounded-br-[16px] xl:col-span-2"];
 
-function StatCard({ value, suffix, label, className, image, icon }: StatCardProps) {
+function StatCard({ item, className }: { item: StatItem; className?: string }) {
   return (
     <div
       className={cn(
@@ -19,10 +15,10 @@ function StatCard({ value, suffix, label, className, image, icon }: StatCardProp
         className,
       )}
     >
-      {image && (
+      {item.image && (
         <>
           <Image
-            src={image}
+            src={item.image}
             alt=""
             fill
             sizes="(min-width: 1280px) 31vw, 50vw"
@@ -31,16 +27,26 @@ function StatCard({ value, suffix, label, className, image, icon }: StatCardProp
           <div aria-hidden className="absolute inset-0 -z-10 bg-white/55" />
         </>
       )}
-      {icon}
+      {item.icon && (
+        <Image
+          src={item.icon}
+          alt=""
+          width={54}
+          height={54}
+          className="absolute top-3 left-4 size-8 md:top-5 md:left-6 md:size-10 xl:top-[calc(12px+6*var(--fp))] xl:left-[31px] xl:size-[calc(36px+12*var(--fp))]"
+        />
+      )}
       <p className="text-3xl leading-none font-bold md:text-4xl xl:text-[46px]">
-        <CountUp value={value} suffix={suffix} />
+        <CountUp value={item.value} suffix={item.suffix} />
       </p>
-      <p className="mt-1.5 text-xs leading-none md:text-sm xl:mt-[10px] xl:text-[17px]">{label}</p>
+      <p className="mt-1.5 text-xs leading-none md:text-sm xl:mt-[10px] xl:text-[17px]">
+        {item.label}
+      </p>
     </div>
   );
 }
 
-export default function Stats() {
+export default function Stats({ content }: { content: StatsContent }) {
   return (
     <section
       aria-labelledby="stats-title"
@@ -50,52 +56,33 @@ export default function Stats() {
         id="stats-title"
         className="text-[34px] leading-[40px] font-black md:text-[60px] md:leading-[68px] xl:absolute xl:top-[142px] xl:left-[72px] xl:text-[calc(60px+23*var(--fp))] xl:leading-[calc(70px+26*var(--fp))]"
       >
-        <span className="text-outline">KÖKLÜ GEÇMİŞ,</span>
-        <br />
-        DİNAMİK <span className="text-outline">VE</span>
-        <br />
-        SÜRDÜRÜLEBİLİR
-        <br />
-        <span className="text-outline">TEDARİK</span>
+        {content.title.map((line, lineIndex) => (
+          <Fragment key={lineIndex}>
+            {lineIndex > 0 && <br />}
+            {line.map((segment) =>
+              segment.outline ? (
+                <span key={segment.text} className="text-outline">
+                  {segment.text}
+                </span>
+              ) : (
+                <Fragment key={segment.text}>{segment.text}</Fragment>
+              ),
+            )}
+          </Fragment>
+        ))}
       </h2>
 
       {/* Masaüstünde içerik 638→890px'ten başlar, 600→954px genişliğindedir. */}
       <div className="mt-6 md:mt-10 xl:absolute xl:top-[98px] xl:left-[calc(638px+252*var(--fp))] xl:mt-0 xl:w-[calc(600px+354*var(--fp))]">
         <p className="text-body md:max-w-[612px] xl:ml-[calc(200px+124*var(--fp))] xl:leading-6">
-          37 yıllık tecrübemizi, geleceğin teknolojileri ve doğa dostu çözümlerle harmanlıyoruz.
-          Sürdürülebilirlik ilkelerinden ödün vermeden, çeliğin sarsılmaz gücünü, 81 ile uzanan
-          kusursuz bir lojistik ağıyla projelerinize ulaştırıyoruz.
+          {content.text}
         </p>
 
         {/* Mobilde 2x2; masaüstünde üst sıra geniş+dar, alt sıra dar+geniş. */}
         <div className="mt-8 grid grid-cols-2 gap-3 text-ink md:gap-4 xl:mt-[73px] xl:grid-cols-[346fr_220fr_346fr] xl:gap-x-[21px] xl:gap-y-4">
-          <StatCard
-            value={40}
-            label="YIL TECRÜBE"
-            image="/images/stat-climber.jpg"
-            className="rounded-tl-[16px] xl:col-span-2"
-          />
-          <StatCard value={15} label="İHRACAT ÜLKESİ" />
-          <StatCard
-            value={81}
-            label="İLDE HİZMET"
-            icon={
-              <Image
-                src="/images/icon-building.svg"
-                alt=""
-                width={54}
-                height={54}
-                className="absolute top-3 left-4 size-8 md:top-5 md:left-6 md:size-10 xl:top-[calc(12px+6*var(--fp))] xl:left-[31px] xl:size-[calc(36px+12*var(--fp))]"
-              />
-            }
-          />
-          <StatCard
-            value={800}
-            suffix="+"
-            label="İŞ ORTAĞI"
-            image="/images/stat-handshake.jpg"
-            className="rounded-br-[16px] xl:col-span-2"
-          />
+          {content.items.map((item, index) => (
+            <StatCard key={item.label} item={item} className={cardLayout[index]} />
+          ))}
         </div>
       </div>
     </section>

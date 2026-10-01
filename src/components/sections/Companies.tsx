@@ -5,7 +5,7 @@ import { useState } from "react";
 import Logo from "@/components/ui/Logo";
 import LoopVideo from "@/components/ui/LoopVideo";
 import PillLink from "@/components/ui/PillLink";
-import { companies } from "@/lib/companies";
+import type { CompaniesContent } from "@/types/content";
 import { cn } from "@/lib/utils";
 
 /** Banner sağındaki çentikli kontur deseni. */
@@ -34,7 +34,8 @@ function LinePattern() {
   );
 }
 
-export default function Companies() {
+export default function Companies({ content }: { content: CompaniesContent }) {
+  const companies = content.items;
   const [activeIndex, setActiveIndex] = useState(0);
   /** Geçiş sırasında çıkan önceki şirket; kayma animasyonu bitince temizlenir. */
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
@@ -64,17 +65,14 @@ export default function Companies() {
       </div>
 
       <div className="px-(--gutter) pt-10 pb-6 md:pb-8 xl:pt-[24px] xl:pr-0 xl:pb-[32px] xl:pl-[283px]">
-        <p className="text-xs leading-none md:text-base xl:text-lg">GRUP ŞİRKETLERİMİZ</p>
+        <p className="text-xs leading-none md:text-base xl:text-lg">{content.eyebrow}</p>
         <h2
           id="companies-title"
           className="mt-2.5 text-[22px] leading-tight font-semibold md:text-[28px] xl:mt-[10px] xl:text-[32px] xl:leading-none"
         >
-          BİRLİKTE BÜYÜYEN BİR YAPI
+          {content.title}
         </h2>
-        <p className="mt-3 max-w-[640px] text-body text-ink-deep xl:mt-[11px]">
-          Sayan Grup çatısı altında farklı alanlarda faaliyet gösteren şirketlerimiz, ortak bir
-          hedef doğrultusunda grubun gelişimine katkı sağlıyor.
-        </p>
+        <p className="mt-3 max-w-[640px] text-body text-ink-deep xl:mt-[11px]">{content.text}</p>
       </div>
 
       <div className="relative isolate h-[540px] overflow-hidden bg-ink-deep text-white md:h-[640px] xl:h-[762px]">

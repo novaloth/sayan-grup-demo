@@ -5,14 +5,14 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Logo from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
-import { mainNav } from "@/lib/site";
+import type { NavItem } from "@/types/content";
 
 /** Mobil ve tablette header çubuğu ile mobil menü üst çubuğunun ortak ölçüleri. */
 const barClass = "flex h-20 items-center justify-between md:h-24";
 const logoClass = "h-[53px] w-auto md:h-[64px]";
 
 type NavListProps = {
-  items: typeof mainNav;
+  items: NavItem[];
   className?: string;
   onNavigate?: () => void;
 };
@@ -45,7 +45,10 @@ function LanguageSwitch() {
   );
 }
 
-export default function SiteHeader() {
+/** Masaüstünde logonun solunda gösterilen menü öğesi sayısı; kalanlar sağda yer alır. */
+const DESKTOP_LEFT_NAV_COUNT = 4;
+
+export default function SiteHeader({ nav }: { nav: NavItem[] }) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
@@ -70,7 +73,7 @@ export default function SiteHeader() {
         )}
       >
         <nav aria-label="Ana menü" className="hidden xl:block">
-          <NavList items={mainNav.slice(0, 4)} />
+          <NavList items={nav.slice(0, DESKTOP_LEFT_NAV_COUNT)} />
         </nav>
 
         {/* Referansta logo tam ortada değil, 9px solda duruyor. */}
@@ -79,7 +82,7 @@ export default function SiteHeader() {
         </Link>
 
         <div className="flex items-center gap-5 xl:gap-8">
-          <NavList items={mainNav.slice(4)} className="hidden xl:flex" />
+          <NavList items={nav.slice(DESKTOP_LEFT_NAV_COUNT)} className="hidden xl:flex" />
           <LanguageSwitch />
           <button
             type="button"
@@ -112,7 +115,7 @@ export default function SiteHeader() {
           </div>
           <nav aria-label="Mobil menü" className="mt-10">
             <NavList
-              items={mainNav}
+              items={nav}
               onNavigate={close}
               className="flex-col gap-6 text-[28px] leading-none font-light md:text-4xl"
             />
